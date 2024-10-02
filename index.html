@@ -122,6 +122,8 @@
     } else {
         canvas.style.width = "100%";
         canvas.style.height = "100%";
+        // Ocultar el mensaje de orientación en dispositivos de escritorio
+        orientationWarning.style.display = 'none';
     }
 
     fullscreenButton.onclick = () => {
