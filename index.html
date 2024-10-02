@@ -20,6 +20,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
+        <button id="fullscreenButton">Pantalla Completa</button>
         <div id="unity-build-title">Glovoton</div>
       </div>
     </div>
@@ -86,6 +87,14 @@
         container.className = "unity-mobile";
         canvas.className = "unity-mobile";
 
+        // Intentar poner el juego en pantalla completa automáticamente en móviles
+        document.getElementById('unity-container').requestFullscreen().catch(err => {
+            console.log('Fullscreen request denied:', err);
+        });
+
+        // Mostrar el botón de pantalla completa si el modo automático falla
+        fullscreenButton.style.display = "block";
+
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
@@ -97,6 +106,17 @@
         canvas.style.width = "100%";
         canvas.style.height = "100%";
       }
+
+      // Configurar el botón de pantalla completa
+    fullscreenButton.onclick = () => {
+        if (!document.fullscreenElement) {
+            document.getElementById('unity-container').requestFullscreen().catch(err => {
+                console.log('Fullscreen request denied:', err);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    };
 
       loadingBar.style.display = "block";
 
