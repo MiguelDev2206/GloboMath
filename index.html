@@ -57,11 +57,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/GloboMath.loader.js";
+      var loaderUrl = buildUrl + "/GlobotonPrueba.loader.js";
       var config = {
-        dataUrl: buildUrl + "/GloboMath.data",
-        frameworkUrl: buildUrl + "/GloboMath.framework.js",
-        codeUrl: buildUrl + "/GloboMath.wasm",
+        dataUrl: buildUrl + "/GlobotonPrueba.data",
+        frameworkUrl: buildUrl + "/GlobotonPrueba.framework.js",
+        codeUrl: buildUrl + "/GlobotonPrueba.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Matemath",
         productName: "Glovoton",
@@ -108,7 +108,7 @@
               }).then((unityInstance) => {
                 loadingBar.style.display = "none";
                 fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
+                  document.makeFullscreen('unity-container');
                 };
               }).catch((message) => {
                 alert(message);
