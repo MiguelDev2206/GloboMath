@@ -147,19 +147,19 @@
 
     var script = document.createElement("script");
     script.src = loaderUrl;
-    script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-            progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-            loadingBar.style.display = "none";
+   script.onload = () => {
+    createUnityInstance(canvas, config, (progress) => {
+        progressBarFull.style.width = 100 * progress + "%";
+    }).then((unityInstance) => {
+        loadingBar.style.display = "none";
 
-            // Configurar post-procesado basado en el tipo de dispositivo
-            configurePostProcessing(unityInstance);
-
-        }).catch((message) => {
-            alert(message);
-        });
-    };
+        // Asegúrate de que Unity está completamente cargado antes de enviar el mensaje
+        unityInstance.SendMessage('PostProcessingManager', 'SetDeviceType', isMobile ? 'mobile' : 'desktop');
+        console.log("Mensaje enviado a Unity:", isMobile ? 'mobile' : 'desktop');
+    }).catch((message) => {
+        alert(message);
+    });
+};
 
     document.body.appendChild(script);
 
