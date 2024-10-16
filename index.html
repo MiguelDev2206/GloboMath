@@ -138,36 +138,18 @@
 
     loadingBar.style.display = "block";
 
-    // Insertar la detección del dispositivo y comunicación con Unity aquí
-    function IsMobile() {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        // Detectar dispositivos móviles
-        if (/android|iPad|iPhone|iPod/i.test(userAgent)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Llamar a una función de Unity con el resultado
-    function DetectDeviceForUnity() {
-        var isMobile = IsMobile();
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                progressBarFull.style.width = 100 * progress + "%";
-            }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                unityInstance.SendMessage('PostProcessingManager', 'SetDeviceType', isMobile ? 'mobile' : 'desktop');
-            }).catch((message) => {
-                alert(message);
-            });
-        };
-    }
-
-    DetectDeviceForUnity();
-
     var script = document.createElement("script");
     script.src = loaderUrl;
+    script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+            loadingBar.style.display = "none";
+        }).catch((message) => {
+            alert(message);
+        });
+    };
+
     document.body.appendChild(script);
 </script>
 </body>
