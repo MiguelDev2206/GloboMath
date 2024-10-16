@@ -36,11 +36,12 @@
     <div id="unity-warning"></div>
     <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div> <!-- Botón de pantalla completa de Unity -->
+        <div id="unity-fullscreen-button"></div>
         <div id="unity-build-title">Glovoton</div>
     </div>
     <div id="orientation-warning">Por favor, gira tu dispositivo para jugar en modo horizontal.</div>
 </div>
+
 <script>
     var container = document.querySelector("#unity-container");
     var canvas = document.querySelector("#unity-canvas");
@@ -81,7 +82,18 @@
         showBanner: unityShowBanner,
     };
 
-    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    // Detectar si el dispositivo es móvil
+    function isMobileDevice() {
+        return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
+
+    // Llamar a una función de Unity para activar/desactivar el post-procesado
+    function configurePostProcessing(unityInstance) {
+        var deviceType = isMobileDevice() ? 'mobile' : 'desktop';
+        unityInstance.SendMessage('PostProcessingManager', 'SetDeviceType', deviceType);
+    }
+
+    var isMobile = isMobileDevice();
 
     if (isMobile) {
         var meta = document.createElement('meta');
@@ -105,24 +117,19 @@
         // Detectar cambios de orientación
         function checkOrientation() {
             if (window.innerWidth < window.innerHeight) {
-                // Si está en orientación vertical
                 orientationWarning.style.display = 'flex';
             } else {
-                // Si está en orientación horizontal
                 orientationWarning.style.display = 'none';
             }
         }
 
-        // Escuchar los eventos de cambio de orientación
         window.addEventListener('resize', checkOrientation);
         window.addEventListener('orientationchange', checkOrientation);
-
-        // Comprobar orientación inicial
         checkOrientation();
+
     } else {
         canvas.style.width = "100%";
         canvas.style.height = "100%";
-        // Ocultar el mensaje de orientación en dispositivos de escritorio
         orientationWarning.style.display = 'none';
     }
 
@@ -140,38 +147,22 @@
 
     var script = document.createElement("script");
     script.src = loaderUrl;
-
-    // Insertar la detección del dispositivo y comunicación con Unity aquí
-    function IsMobile() {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        // Detectar dispositivos móviles
-        if (/android|iPad|iPhone|iPod/i.test(userAgent)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Llamar a una función de Unity con el resultado
-    function DetectDeviceForUnity() {
-        var isMobile = IsMobile();
+    script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
             progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
             loadingBar.style.display = "none";
-            // Enviar mensaje a Unity para configurar el dispositivo
-            unityInstance.SendMessage('PostProcessingManager', 'SetDeviceType', isMobile ? 'mobile' : 'desktop');
+
+            // Configurar post-procesado basado en el tipo de dispositivo
+            configurePostProcessing(unityInstance);
+
         }).catch((message) => {
             alert(message);
         });
-    }
-
-    // Ejecutar la función de detección cuando Unity esté listo
-    script.onload = () => {
-        DetectDeviceForUnity();
     };
 
     document.body.appendChild(script);
+
 </script>
 </body>
 </html>
