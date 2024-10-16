@@ -145,7 +145,7 @@
     function IsMobile() {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         // Detectar dispositivos móviles
-        if (isMobile)) {
+        if (/android|iPad|iPhone|iPod/i.test(userAgent)) {
             return true;
         } else {
             return false;
