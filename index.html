@@ -145,15 +145,6 @@
             progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
             loadingBar.style.display = "none";
-
-            // Obtener id_user del URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const idUser = urlParams.get('id_user');
-
-            // Pasar id_user al juego
-            if (idUser) {
-                unityInstance.SendMessage('MenuManager', 'SetUserId', idUser);
-            }
         }).catch((message) => {
             alert(message);
         });
